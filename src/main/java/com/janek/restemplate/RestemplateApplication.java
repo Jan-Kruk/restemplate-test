@@ -11,7 +11,7 @@ import org.springframework.context.event.EventListener;
 @SpringBootApplication
 public class RestemplateApplication {
 	@Autowired
-	ShawnMendesProxy shawnMendesClient;
+	ItunesProxy shawnMendesClient;
 
 	public static void main(String[] args) {
 		SpringApplication.run(RestemplateApplication.class, args);

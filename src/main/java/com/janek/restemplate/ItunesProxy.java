@@ -1,19 +1,17 @@
 package com.janek.restemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+
 @Component
-public class ShawnMendesProxy {
+public class ItunesProxy {
     @Autowired
     RestTemplate restTemplate;
 
@@ -26,6 +24,8 @@ public class ShawnMendesProxy {
     }
 
     private String makeRequest(String uri) {
+//        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().queryParam("term","shawnMendes")
+//                .queryParam("limit",2).scheme("https").host("itunes.apple.com");
         try{
             ResponseEntity<String> response = restTemplate.exchange(
                     uri,

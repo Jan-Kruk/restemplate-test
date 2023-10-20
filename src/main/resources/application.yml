@@ -1,3 +1,6 @@
 shawnmendes:
   service:
     url: https://itunes.apple4.com
+shawnmendes2:
+  local:
+    url: http://localhost:8080/shawn/songs
