@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class ItunesProxy {
@@ -18,9 +19,18 @@ public class ItunesProxy {
     @Value("${shawnmendes.service.url}")
     String url;
 
+    @Value("${shawnmendes.service.port}")
+    Integer port;
+
     public String makeShawnMendesRequest(String term, Integer limit) throws JsonProcessingException {
-        String uri = url +"/search?term=" + term + "&limit=" + limit;
-        return makeRequest(uri);
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host(url)
+                .port(port)
+                .path("/search")
+                .queryParam("term",term)
+                .queryParam("limit",limit);
+        return makeRequest(builder.build().toUriString());
     }
 
     private String makeRequest(String uri) {

@@ -3,34 +3,41 @@ package com.janek.restemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class SampleShawenMendesServerProxy {
     @Autowired
     RestTemplate restTemplate;
 
-    @Value("${shawnmendes2.local.url}")
+    @Value("${shawnmendes-server.service.url}")
     String url;
 
-    public String makeShawnMendesRequest(String term, Integer limit) throws JsonProcessingException {
-        String uri = url +"/search?term=" + term + "&limit=" + limit;
-        return makeRequest(uri);
-    }
+    @Value("${shawnmendes-server.service.port}")
+    Integer port;
 
-    private String makeRequest(String uri) {
-//        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().queryParam("term","shawnMendes")
-//                .queryParam("limit",2).scheme("https").host("itunes.apple.com");
+    public String makeRequest() {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host(url)
+                .port(port)
+                .path("shawn/songs");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("requestId", "eloelo");
+        HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(httpHeaders);
         try{
             ResponseEntity<String> response = restTemplate.exchange(
-                    uri,
+                    builder.build().toUri(),
                     HttpMethod.GET,
-                    null,
+                    httpEntity,
                     String.class);
             return response.getBody();
         }catch (RestClientResponseException e){
@@ -40,6 +47,51 @@ public class SampleShawenMendesServerProxy {
         }
         return null;
     }
-
+    public String postRequest() {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host(url)
+                .port(port)
+                .path("shawn/songs");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("requestId", "eloelo");
+//        HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(httpHeaders);
+        SampleShawnMendesRequest requestBody = new SampleShawnMendesRequest("hahahaha");
+        HttpEntity<SampleShawnMendesRequest> httpEntityBody = new HttpEntity<>(requestBody, httpHeaders);
+        try{
+            ResponseEntity<String> response = restTemplate.exchange(
+                    builder.build().toUri(),
+                    HttpMethod.POST,
+                    httpEntityBody,
+                    String.class);
+            return response.getBody();
+        }catch (RestClientResponseException e){
+            System.out.println(e.getStatusText() + " " + e.getStatusCode());
+        }catch (ResourceAccessException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+    public String makeDeleteRequest() {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host(url)
+                .port(port)
+                .path("shawn/songs")
+                .queryParam("id", 0);
+        try{
+            ResponseEntity<String> response = restTemplate.exchange(
+                    builder.build().toUri(),
+                    HttpMethod.DELETE,
+                   null,
+                    String.class);
+            return response.getBody();
+        }catch (RestClientResponseException e){
+            System.out.println(e.getStatusText() + " " + e.getStatusCode());
+        }catch (ResourceAccessException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 
 }
