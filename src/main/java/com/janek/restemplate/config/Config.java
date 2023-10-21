@@ -1,4 +1,4 @@
-package com.janek.restemplate;
+package com.janek.restemplate.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

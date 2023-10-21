@@ -1,4 +1,4 @@
-package com.janek.restemplate;
+package com.janek.restemplate.proxy.sampleshawnmendes;
 
 import java.util.List;
 

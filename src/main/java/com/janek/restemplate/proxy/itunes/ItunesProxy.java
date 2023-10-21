@@ -1,4 +1,4 @@
-package com.janek.restemplate;
+package com.janek.restemplate.proxy.itunes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;

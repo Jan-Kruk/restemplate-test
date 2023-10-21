@@ -1,7 +1,7 @@
-package com.janek.restemplate;
+package com.janek.restemplate.proxy.itunes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ShawnMendesResult(String trackName, String artistName) {
+public record ITunesResult(String trackName, String artistName) {
 }

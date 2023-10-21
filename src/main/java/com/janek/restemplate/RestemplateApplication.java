@@ -2,6 +2,12 @@ package com.janek.restemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.janek.restemplate.proxy.itunes.ItunesProxy;
+import com.janek.restemplate.proxy.itunes.ITunesResponse;
+import com.janek.restemplate.proxy.sampleshawnmendes.SampleShawenMendesServerProxy;
+import com.janek.restemplate.proxy.sampleshawnmendes.SampleShawnMendesResponse;
+import com.janek.restemplate.service.ITunesService;
+import com.janek.restemplate.service.ShawnMendesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,11 +17,14 @@ import org.springframework.context.event.EventListener;
 @SpringBootApplication
 public class RestemplateApplication {
 
-	@Autowired
-	ItunesProxy shawnMendesClient;
+	ITunesService iTunesService;
 
+	ShawnMendesService shawnMendesService;
 	@Autowired
-	SampleShawenMendesServerProxy sampleShawenMendesServerProxy;
+	public RestemplateApplication(ITunesService iTunesService, ShawnMendesService shawnMendesService) {
+		this.iTunesService = iTunesService;
+		this.shawnMendesService = shawnMendesService;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(RestemplateApplication.class, args);
@@ -23,25 +32,9 @@ public class RestemplateApplication {
 
 	@EventListener(ApplicationStartedEvent.class)
 	public void run() throws JsonProcessingException {
-		String json = shawnMendesClient.makeShawnMendesRequest("shawnmendes",1);
-		if (json != null){
-			ShawnMendesResponse shawnMendesResponse = mapJsonToShawnMendesResponse(json);
-			System.out.println(shawnMendesResponse);
-		}
-		sampleShawenMendesServerProxy.makeDeleteRequest();
-		String jsonShawnMendesSampleServer = sampleShawenMendesServerProxy.makeRequest();
-		if (jsonShawnMendesSampleServer != null){
-			SampleShawnMendesResponse sampleShawnMendesResponse = mapJsonToSampleShawnMendesResponse(jsonShawnMendesSampleServer);
-			System.out.println(sampleShawnMendesResponse);
-		}
+		iTunesService.dosth();
+		shawnMendesService.dosth();
+	}
 
-	}
-	private ShawnMendesResponse mapJsonToShawnMendesResponse(String json) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(json, ShawnMendesResponse.class);
-	}
-	private SampleShawnMendesResponse mapJsonToSampleShawnMendesResponse(String json) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(json, SampleShawnMendesResponse.class);
-	}
+
 }
